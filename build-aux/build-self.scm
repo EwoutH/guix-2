@@ -21,6 +21,7 @@
   #:use-module (srfi srfi-19)
   #:use-module (srfi srfi-26)
   #:use-module (ice-9 match)
+  #:use-module (system base compile)
   #:export (build))
 
 ;;; Commentary:
@@ -82,23 +83,26 @@ Guix."
                 #:rest rest)
   "Return a derivation that unpacks SOURCE into STORE and compiles Scheme
 files."
+
+  ;; Pre-load the compiler modules so we don't end up rebuilding them due to
+  ;; %FRESH-AUTO-COMPILE.
+  (compile #t)
+
   ;; Start by jumping into the target Guix so that we have access to the
   ;; latest packages and APIs.
   ;;
   ;; Our checkout in the store has mtime set to the epoch, and thus .go
   ;; files look newer, even though they may not correspond.
-  (parameterize* ((%load-should-auto-compile #f)
-                  (%fresh-auto-compile #f)
+  (parameterize* ((%load-should-auto-compile #t)
+                  (%fresh-auto-compile #t)
 
                   ;; Work around <https://bugs.gnu.org/29226>.
                   (%load-compiled-path (pure-load-compiled-path)))
-    ;; FIXME: This is currently too expensive notably because it involves
-    ;; compiling a number of the big package files such as perl.scm, which
-    ;; takes lots of time and memory as of Guile 2.2.2.
-    ;;
-    ;; (let ((reload-guix (module-ref (resolve-interface '(guix self))
-    ;;                                'reload-guix)))
-    ;;   (reload-guix))           ;cross fingers!
+    ;; Hide auto-compilation messages.
+    (parameterize ((current-warning-port (%make-void-port "w")))
+      (let ((reload-guix (module-ref (resolve-interface '(guix self))
+                                     'reload-guix)))
+        (reload-guix)))                           ;cross fingers!
 
     (let ((guix-derivation (module-ref (resolve-interface '(guix self))
                                        'guix-derivation)))
