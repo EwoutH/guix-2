@@ -1,6 +1,6 @@
 ;;; GNU Guix --- Functional package management for GNU
 ;;; Copyright © 2014, 2017, 2018 Ludovic Courtès <ludo@gnu.org>
-;;; Copyright © 2015, 2016, 2017 Ricardo Wurmus <rekado@elephly.net>
+;;; Copyright © 2015, 2016, 2017, 2018 Ricardo Wurmus <rekado@elephly.net>
 ;;; Copyright © 2015 Mark H Weaver <mhw@netris.org>
 ;;; Copyright © 2015, 2016, 2017 Stefan Reichör <stefan@xsteve.at>
 ;;; Copyright © 2016 Raimon Grau <raimonster@gmail.com>
@@ -1050,8 +1050,7 @@ sockets in Perl.")
      `(("pkg-config" ,pkg-config)))
     (inputs
      `(("dbus" ,dbus)
-       ("zlib" ,zlib)
-       ("network-manager" ,network-manager)))
+       ("zlib" ,zlib)))
     (arguments
      `(#:phases
        (modify-phases %standard-phases
