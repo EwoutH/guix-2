@@ -77,9 +77,15 @@
   (string->char-set
    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+-._?="))
 
-(define (normalize-string str)
-  "Replace invalid characters in STR with a hyphen."
-  (string-join (string-tokenize str valid-char-set) "-"))
+(define (normalize-string str-or-list)
+  "Replace invalid characters in STR-OR-LIST with a hyphen."
+  ;; Dependencies can be either strings or list with properties, e.g.
+  ;; (:version "bar" "0.1.2")
+  (if (string? str-or-list)
+      (string-join (string-tokenize str-or-list valid-char-set) "-")
+      (map (lambda (e) (if (string? e)
+                           (normalize-string e)
+                           e)) str-or-list)))
 
 (define (inputs->asd-file-map inputs)
   "Produce a hash table of the form (system . asd-file), where system is the
