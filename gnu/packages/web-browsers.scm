@@ -35,6 +35,7 @@
   #:use-module (gnu packages gnupg)
   #:use-module (gnu packages libevent)
   #:use-module (gnu packages libidn)
+  #:use-module (gnu packages lisp)
   #:use-module (gnu packages lua)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages ncurses)
@@ -48,6 +49,8 @@
   #:use-module (gnu packages webkit)
   #:use-module (gnu packages xorg)
   #:use-module (guix download)
+  #:use-module (guix git-download)
+  #:use-module (guix build-system asdf)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system glib-or-gtk)
   #:use-module (guix build-system python))
@@ -307,7 +310,7 @@ access.")
                 '(16 24 32 48 64 128 256 512))
                (install-file "icons/qutebrowser.svg"
                              (string-append hicolor "/scalable/apps"))
-               
+
                (substitute* "qutebrowser.desktop"
                  (("Exec=qutebrowser")
                   (string-append "Exec=" out "/bin/qutebrowser")))
@@ -318,3 +321,45 @@ access.")
     (description "qutebrowser is a keyboard-focused browser with a minimal
 GUI.  It is based on PyQt5 and QtWebKit.")
     (license license:gpl3+)))
+
+(define-public sbcl-next
+  (let ((commit "7e7fe6cac8e2cd6d50232a2f2470cde73fd91b0e"))
+    (package
+      (name "sbcl-next")
+      (version (git-version "0.0.8" "1" commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (url "https://github.com/next-browser/next")
+                      (commit commit)))
+                (sha256
+                 (base32
+                  "1pcpb274zb0qm26rrglgcgzg2d2v7j2aja5685swwyq9rcqlbdf4"))))
+      (build-system asdf-build-system/sbcl)
+      ;; :depends-on (:alexandria :cl-strings :cl-string-match :puri
+      ;;              :queues.simple-queue :sqlite :parenscript :cl-json :swank)
+      ;; :depends-on (:next :cl-cffi-gtk :cl-webkit2 :lparallel)
+      ;; inputs or native-inputs?
+      ;; (inputs
+      ;;  `(("glib-networking" ,glib-networking)
+      ;;    ("gsettings-desktop-schemas" ,gsettings-desktop-schemas)
+      ;;    ("webkitgtk" ,webkitgtk)
+      ;;    ("sqlite" ,sqlite)))
+      (inputs
+       `(("alexandria" ,sbcl-alexandria)
+         ("cl-strings" ,sbcl-cl-strings)))
+      (arguments
+       `(#:tests? #f
+         #:asd-file "next/next.asd"
+         ;; #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
+         ;; #:phases
+         ;; (modify-phases %standard-phases
+         ;;   (delete 'configure))
+         ))
+      (home-page "http://next-browser.com/")
+      (synopsis "Emacs-inspired web browser in extensible in Common Lisp")
+      (description "Next is a keyboard-oriented, extensible web-browser inspired
+by Emacs and designed for power users.  The application has familiar
+key-bindings, is fully configurable and extensible in Lisp, and has powerful
+features for productive professionals.")
+      (license license:expat))))
