@@ -2195,3 +2195,38 @@ pretty, documentation is code.")
 
 (define-public ecl-mgl-pax
   (sbcl-package->ecl-package sbcl-mgl-pax))
+
+(define-public sbcl-ascii-strings
+  (let ((revision "1")
+        (changeset "5048480a61243e6f1b02884012c8f25cdbee6d97"))
+    (package
+      (name "sbcl-ascii-strings")
+      (version (string-append "0-" revision "." (string-take changeset 7)))
+      (source
+       (origin
+         (method hg-fetch)
+         (uri (hg-reference
+               (url "https://bitbucket.org/vityok/cl-string-match/")
+               (changeset changeset)))
+         (sha256
+          (base32
+           "01wn5qx562w43ssy92xlfgv79w7p0nv0wbl76mpmba131n9ziq2y"))
+         (file-name (string-append "cl-string-match-" version "-checkout"))))
+      (build-system asdf-build-system/sbcl)
+      (inputs
+       `(("alexandria" ,sbcl-alexandria)
+         ("babel" ,sbcl-babel)))
+      (arguments
+       `(#:asd-file "ascii-strings.asd"))
+      (synopsis "Operations on ASCII strings")
+      (description
+       "Operations on ASCII strings.  Essentially this can be any kind of
+single-byte encoded strings.")
+      (home-page "https://bitbucket.org/vityok/cl-string-match/")
+      (license license:bsd-3))))
+
+(define-public cl-ascii-strings
+  (sbcl-package->cl-source-package sbcl-ascii-strings))
+
+(define-public ecl-ascii-strings
+  (sbcl-package->ecl-package sbcl-ascii-strings))
