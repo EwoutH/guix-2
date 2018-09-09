@@ -39,7 +39,7 @@
 (define %store
   (open-connection-for-tests))
 
-(define %bootstrap-inputs
+(define (%bootstrap-inputs)
   ;; Use the bootstrap inputs so it doesn't take ages to run these tests.
   ;; This still involves building Make, Diffutils, and Findutils.
   ;; XXX: We're relying on the higher-level `package-derivations' here.
@@ -47,14 +47,14 @@
        (map (match-lambda
              ((name package)
               (list name (package-derivation %store package))))
-            (@@ (gnu packages commencement) %boot0-inputs))))
+            (@@ (gnu packages commencement) (%boot0-inputs)))))
 
 (define %bootstrap-search-paths
   ;; Search path specifications that go with %BOOTSTRAP-INPUTS.
   (append-map (match-lambda
                ((name package _ ...)
                 (package-native-search-paths package)))
-              (@@ (gnu packages commencement) %boot0-inputs)))
+              (@@ (gnu packages commencement) (%boot0-inputs))))
 
 (define url-fetch*
   (store-lower url-fetch))
