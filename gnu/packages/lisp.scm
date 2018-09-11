@@ -2232,29 +2232,7 @@ writing code that contains string literals that contain code themselves.")
          ("ironclad" ,sbcl-ironclad)
          ("named-readtables" ,sbcl-named-readtables)
          ("pythonic-string-reader" ,sbcl-pythonic-string-reader)
-         ;; TODO: Fix SWANK compilation error.
-         ;; ("slime" ,emacs-slime)
-         ;; ("swank" ,sbcl-slime-swank)
-         ))
-      (arguments
-       `(#:phases
-         (modify-phases %standard-phases
-           (add-before 'build 'rename-swank-backend
-             (lambda* (#:key inputs #:allow-other-keys)
-               (substitute* '("src/pax.lisp" "src/utility.lisp")
-                 (("swank-backend") "swank/backend")))))))
-      ;; (arguments
-      ;;  `(#:phases
-      ;;    (modify-phases %standard-phases
-      ;;      (add-before 'build 'add-swank-lib-to-path
-      ;;        (lambda* (#:key inputs #:allow-other-keys)
-      ;;          (setenv "LIBRARY_PATH"
-      ;;                  (string-append (assoc-ref inputs "slime")
-      ;;                                 "/share/emacs/site-lisp/guix.d/slime-"
-      ;;                                 ,(package-version emacs-slime)
-      ;;                                 ":"
-      ;;                                 (or (getenv "LIBRARY_PATH") "")))
-      ;;          #t)))))
+         ("swank" ,sbcl-slime-swank)))
       (synopsis "Exploratory programming environment and documentation generator")
       (description
        "PAX provides an extremely poor man's Explorable Programming
@@ -2325,6 +2303,9 @@ single-byte encoded strings.")
        ("yacc" ,sbcl-cl-yacc)
        ("jpl-util" ,sbcl-jpl-util)
        ("jpl-queues" ,sbcl-jpl-queues)
+       ;; TODO: Doc generation requires mgl-pax, which requires SWANK, which I
+       ;; don't know how to build properly.
+       ;; See https://github.com/slime/slime/issues/457#event-1807320285.
        ("mgl-pax" ,sbcl-mgl-pax)
        ("iterate" ,sbcl-iterate)))
     ;; TODO: Tests are not evaluated properly.
