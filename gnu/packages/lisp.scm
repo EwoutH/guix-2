@@ -2220,6 +2220,9 @@ single-byte encoded strings.")
        ("yacc" ,sbcl-cl-yacc)
        ("jpl-util" ,sbcl-jpl-util)
        ("jpl-queues" ,sbcl-jpl-queues)
+       ;; TODO: Doc generation requires mgl-pax, which requires SWANK, which I
+       ;; don't know how to build properly.
+       ;; See https://github.com/slime/slime/issues/457#event-1807320285.
        ("mgl-pax" ,sbcl-mgl-pax)
        ("iterate" ,sbcl-iterate)))
     (arguments
