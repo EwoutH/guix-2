@@ -2148,29 +2148,8 @@ writing code that contains string literals that contain code themselves.")
          ("ironclad" ,sbcl-ironclad)
          ("named-readtables" ,sbcl-named-readtables)
          ("pythonic-string-reader" ,sbcl-pythonic-string-reader)
-         ;; TODO: Fix SWANK compilation error.
-         ;; ("slime" ,emacs-slime)
-         ;; ("swank" ,sbcl-slime-swank)
-         ))
-      (arguments
-       `(#:phases
-         (modify-phases %standard-phases
-           (add-before 'build 'rename-swank-backend
-             (lambda* (#:key inputs #:allow-other-keys)
-               (substitute* '("src/pax.lisp" "src/utility.lisp")
-                 (("swank-backend") "swank/backend")))))))
-      ;; (arguments
-      ;;  `(#:phases
-      ;;    (modify-phases %standard-phases
-      ;;      (add-before 'build 'add-swank-lib-to-path
-      ;;        (lambda* (#:key inputs #:allow-other-keys)
-      ;;          (setenv "LIBRARY_PATH"
-      ;;                  (string-append (assoc-ref inputs "slime")
-      ;;                                 "/share/emacs/site-lisp/guix.d/slime-"
-      ;;                                 ,(package-version emacs-slime)
-      ;;                                 ":"
-      ;;                                 (or (getenv "LIBRARY_PATH") "")))
-      ;;          #t)))))
+         ;; TODO: Fix SWANK package.
+         ("swank" ,sbcl-slime-swank)))
       (synopsis "Exploratory programming environment and documentation generator")
       (description
        "PAX provides an extremely poor man's Explorable Programming
