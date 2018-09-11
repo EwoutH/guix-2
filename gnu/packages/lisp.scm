@@ -2190,7 +2190,7 @@ pretty, documentation is code.")
          (sha256
           (base32
            "01wn5qx562w43ssy92xlfgv79w7p0nv0wbl76mpmba131n9ziq2y"))
-         (file-name (string-append "cl-string-match-" version "-checkout"))))
+         (file-name (git-file-name "cl-string-match" version))))
       (build-system asdf-build-system/sbcl)
       (inputs
        `(("alexandria" ,sbcl-alexandria)
