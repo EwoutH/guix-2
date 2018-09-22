@@ -28,7 +28,8 @@
   #:use-module (gcrypt hash)
   #:use-module (guix tests)
   #:use-module ((guix packages)
-                #:select (package-derivation package-native-search-paths))
+                #:select (package?
+                          package-derivation package-native-search-paths))
   #:use-module (gnu packages bootstrap)
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)
@@ -47,14 +48,15 @@
        (map (match-lambda
              ((name package)
               (list name (package-derivation %store package))))
-            (@@ (gnu packages commencement) (%boot0-inputs)))))
+            ((@@ (gnu packages commencement) %boot0-inputs)))))
 
 (define %bootstrap-search-paths
   ;; Search path specifications that go with %BOOTSTRAP-INPUTS.
   (append-map (match-lambda
-               ((name package _ ...)
-                (package-native-search-paths package)))
-              (@@ (gnu packages commencement) (%boot0-inputs))))
+                ((name package _ ...)
+                 (package-native-search-paths package)))
+              (filter package?
+                      ((@@ (gnu packages commencement) %boot0-inputs)))))
 
 (define url-fetch*
   (store-lower url-fetch))
