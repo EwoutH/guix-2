@@ -48,15 +48,18 @@
        (map (match-lambda
              ((name package)
               (list name (package-derivation %store package))))
-            ((@@ (gnu packages commencement) %boot0-inputs)))))
+            (filter
+             (compose package? cadr)
+             ((@@ (gnu packages commencement) %boot0-inputs))))))
 
-(define %bootstrap-search-paths
+(define (%bootstrap-search-paths)
   ;; Search path specifications that go with %BOOTSTRAP-INPUTS.
   (append-map (match-lambda
                 ((name package _ ...)
                  (package-native-search-paths package)))
-              (filter package?
-                      ((@@ (gnu packages commencement) %boot0-inputs)))))
+              (filter
+               (compose package? cadr)
+               ((@@ (gnu packages commencement) %boot0-inputs)))))
 
 (define url-fetch*
   (store-lower url-fetch))
@@ -106,9 +109,9 @@
                                #:guile %bootstrap-guile))
          (build    (gnu-build %store "hello-2.8"
                               `(("source" ,tarball)
-                                ,@%bootstrap-inputs)
+                                ,@(%bootstrap-inputs))
                               #:guile %bootstrap-guile
-                              #:search-paths %bootstrap-search-paths))
+                              #:search-paths (%bootstrap-search-paths)))
          (out      (derivation->output-path build)))
     (and (build-derivations %store (list (pk 'hello-drv build)))
          (valid-path? %store out)
