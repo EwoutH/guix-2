@@ -1,5 +1,6 @@
 ;;; GNU Guix --- Functional package management for GNU
 ;;; Copyright © 2012, 2013, 2014, 2015, 2017, 2018 Ludovic Courtès <ludo@gnu.org>
+;;; Copyright © 2018 Jan (janneke) Nieuwenhuizen <janneke@gnu.org>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -25,11 +26,13 @@
   #:use-module (guix build union)
   #:use-module ((guix build utils)
                 #:select (with-directory-excursion directory-exists?))
-  #:use-module (gnu packages bootstrap)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-64)
   #:use-module (rnrs io ports)
   #:use-module (ice-9 match))
+
+(define %bootstrap-inputs
+  (@@ (gnu packages commencement) %bootstrap-inputs+toolchain))
 
 ;; Exercise the (guix build union) module.
 
@@ -94,8 +97,9 @@
                          `(,name ,(package-derivation %store package))))
 
                        ;; Purposefully leave duplicate entries.
-                       (append (%bootstrap-inputs)
-                               (take (%bootstrap-inputs) 3))))
+                       (filter (compose package? cadr)
+                               (append (%bootstrap-inputs)
+                                (take (%bootstrap-inputs) 3)))))
          (builder `(begin
                      (use-modules (guix build union))
                      (union-build (assoc-ref %outputs "out")
