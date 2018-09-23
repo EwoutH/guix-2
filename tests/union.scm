@@ -26,6 +26,7 @@
   #:use-module (guix build union)
   #:use-module ((guix build utils)
                 #:select (with-directory-excursion directory-exists?))
+  #:use-module (gnu packages bootstrap)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-64)
   #:use-module (rnrs io ports)
