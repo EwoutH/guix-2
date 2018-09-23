@@ -657,7 +657,7 @@ jemalloc = \"" jemalloc "/lib/libjemalloc_pic.a" "\"
 
 (define-public rust-1.23
   (package
-    (inherit rust-1.20)
+    (inherit rust-1.22)
     (name "rust")
     (version "1.23.0")
     (source (rust-source version "14fb8vhjzsxlbi6yrn1r6fl5dlbdd1m92dn5zj5gmzfwf4w9ar3l"))
@@ -669,15 +669,16 @@ jemalloc = \"" jemalloc "/lib/libjemalloc_pic.a" "\"
        ("git" ,git)
        ("procps" ,procps) ; For the tests
        ("python-2" ,python-2)
-       ("rustc-bootstrap" ,rust-bootstrap)
-       ("cargo-bootstrap" ,rust-bootstrap "cargo")
+       ("rustc-bootstrap" ,rust-1.22)
+       ("cargo-bootstrap" ,rust-1.22 "cargo")
        ("pkg-config" ,pkg-config) ; For "cargo"
        ("which" ,which)))
     (arguments
-     (substitute-keyword-arguments (package-arguments rust-1.20)
+     (substitute-keyword-arguments (package-arguments rust-1.22)
        ((#:phases phases)
         `(modify-phases ,phases
            (delete 'configure-archiver)
+           (delete 'remove-ar)
            (add-after 'unpack 'dont-build-native
              (lambda _
                ;; XXX: Revisit this when we use gcc 6.
