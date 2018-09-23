@@ -568,7 +568,7 @@
                (sha256
                 (base32
                  "1pb7fb7fqf9wz9najm85qdma1xhxzf1rhj5gwrlzdsz2zm0hpcv4"))))
-     (supported-systems '("i686-linux"))
+     (supported-systems '("i686-linux" "x86_64-linux"))
      (inputs '())
      (propagated-inputs '())
      (native-inputs `(("tcc" ,tcc-boot)
@@ -615,7 +615,7 @@
                (sha256
                 (base32
                  "1mirn5i825bn5w7rh6mgn0r8aj9xqanav95dwcl1b8sn82f4iwnm"))))
-     (supported-systems '("i686-linux"))
+     (supported-systems '("i686-linux" "x86_64-linux"))
      (inputs '())
      (propagated-inputs '())
      (native-inputs `(("mes" ,mes-boot)
@@ -669,7 +669,7 @@
                       ("coreutils" ,%bootstrap-coreutils&co)
                       ("diffutils" ,diffutils-mesboot)
                       ("make" ,make-mesboot0)))
-     (supported-systems '("i686-linux"))
+     (supported-systems '("i686-linux" "x86_64-linux"))
      (arguments
       `(#:implicit-inputs? #f
         #:guile ,%bootstrap-guile
@@ -713,7 +713,7 @@
                (sha256
                 (base32
                  "1xvfy4pqhrd5v2cv8lzf63iqg92k09g6z9n2ah6ndd4h17k1x0an"))))
-     (supported-systems '("i686-linux"))
+     (supported-systems '("i686-linux" "x86_64-linux"))
      (inputs '())
      (propagated-inputs '())
      (native-inputs `(("binutils" ,binutils-mesboot0)
@@ -825,7 +825,7 @@ ac_cv_c_float_format='IEEE (little-endian)'
    (package
      (inherit mes-boot)
      (name "mesboot-headers")
-     (supported-systems '("i686-linux"))
+     (supported-systems '("i686-linux" "x86_64-linux"))
      (inputs '())
      (propagated-inputs '())
      (native-inputs `(("coreutils" ,%bootstrap-coreutils&co)
@@ -876,7 +876,7 @@ ac_cv_c_float_format='IEEE (little-endian)'
                (sha256
                 (base32
                  "1vl48i16gx6h68whjyhgnn1s57vqq32f9ygfa2fls7pdkbsqvp2q"))))
-     (supported-systems '("i686-linux"))
+     (supported-systems '("i686-linux" "x86_64-linux"))
      (inputs '())
      (propagated-inputs '())
      (native-inputs `(("binutils" ,binutils-mesboot0)
