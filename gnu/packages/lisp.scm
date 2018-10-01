@@ -2278,6 +2278,37 @@ new fiends in addition to old friends like @command{aif} and
 (define-public ecl-anaphora
   (sbcl-package->ecl-package sbcl-anaphora))
 
+;; TODO: sbcl-lift does not build.
+(define-public sbcl-lift
+  (let ((commit "7d49a66c62759535624037826891152223d4206c"))
+    (package
+      (name "sbcl-lift")
+      (version (git-version "0.0.0" "1" commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/gwkkwg/lift")
+               (commit commit)))
+         (sha256
+          (base32
+           "127v5avpz1i4m0lkaxqrq8hrl69rdazqaxf6s8awf0nd7wj2g4dp"))
+         (file-name (git-file-name "lift" version))))
+      (build-system asdf-build-system/sbcl)
+      (arguments
+       ;; Ironically, the tests don't pass.
+       `(#:tests? #f))
+      (synopsis "LIsp Framework for Testing")
+      (description
+       "The LIsp Framework for Testing (LIFT) is a unit and system test tool for LISP.
+Though inspired by SUnit and JUnit, it's built with Lisp in mind.  In LIFT,
+testcases are organized into hierarchical testsuites each of which can have
+its own fixture.  When run, a testcase can succeed, fail, or error.  LIFT
+supports randomized testing, benchmarking, profiling, and reporting.")
+      (home-page "https://github.com/gwkkwg/lift")
+      ;; REVIEW: The actual license is "MIT Style".
+      (license license:expat))))
+
 (define-public sbcl-ascii-strings
   (let ((revision "1")
         (changeset "5048480a61243e6f1b02884012c8f25cdbee6d97"))
