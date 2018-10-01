@@ -2192,7 +2192,6 @@ processes that doesn't run under Emacs.  Lisp processes created by
          ("ironclad" ,sbcl-ironclad)
          ("named-readtables" ,sbcl-named-readtables)
          ("pythonic-string-reader" ,sbcl-pythonic-string-reader)
-         ;; TODO: Fix SWANK package.
          ("swank" ,sbcl-slime-swank)))
       (synopsis "Exploratory programming environment and documentation generator")
       (description
