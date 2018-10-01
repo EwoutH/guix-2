@@ -2628,13 +2628,16 @@ single-byte encoded strings.")
        ("yacc" ,sbcl-cl-yacc)
        ("jpl-util" ,sbcl-jpl-util)
        ("jpl-queues" ,sbcl-jpl-queues)
-       ;; TODO: Doc generation requires mgl-pax, which requires SWANK, which I
-       ;; don't know how to build properly.
-       ;; See https://github.com/slime/slime/issues/457#event-1807320285.
        ("mgl-pax" ,sbcl-mgl-pax)
        ("iterate" ,sbcl-iterate)))
+    ;; TODO: Tests are not evaluated properly.
+    (native-inputs
+     ;; For testing:
+     `(("lisp-unit" ,sbcl-lisp-unit)
+       ("simple-scanf" ,sbcl-simple-scanf)))
     (arguments
-     `(#:asd-file "cl-string-match.asd"))
+     `(#:tests? #f
+       #:asd-file "cl-string-match.asd"))
     (synopsis "Portable, dependency-free set of utilities to manipulate strings in Common Lisp")
     (description
      "@command{cl-strings} is a small, portable, dependency-free set of
