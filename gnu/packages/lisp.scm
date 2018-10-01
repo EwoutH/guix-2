@@ -2143,12 +2143,18 @@ writing code that contains string literals that contain code themselves.")
         (base32
          ;; "065bc4y6iskazdfwlhgcjlzg9bi2hyjbhmyjw3461506pgkj08vi"
          "0pkmg94wn4ii1zhlrncn44mdc5i6c5v0i9gbldx4dwl2yy7ibz5c"))
+       (modules '((guix build utils)))
        (snippet
         '(begin
            (substitute* "contrib/swank-listener-hooks.lisp"
              ((":compile-toplevel :load-toplevel ") ""))
            (substitute* "contrib/swank-presentations.lisp"
              ((":compile-toplevel :load-toplevel ") ""))
+           (substitute* "swank.asd"
+             ((":file \"packages\".*" all)
+              (string-append all "(:file \"swank-loader-asdf\")\n")))
+           (substitute* "swank-loader-asdf.lisp"
+             ((":common-lisp" all) (string-append all " #:asdf")))
            #t))))
     (build-system asdf-build-system/sbcl)
     (arguments
