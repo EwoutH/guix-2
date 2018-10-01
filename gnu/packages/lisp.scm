@@ -2391,6 +2391,39 @@ This library is no longer supported by its author.")
 (define-public ecl-cl-colors
   (sbcl-package->ecl-package sbcl-cl-colors))
 
+(define-public sbcl-cl-ansi-text
+  (let ((commit "53badf7878f27f22f2d4a2a43e6df458e43acbe9"))
+    (package
+      (name "sbcl-cl-ansi-text")
+      (version (git-version "1.0.0" "1" commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/pnathan/cl-ansi-text")
+               (commit commit)))
+         (sha256
+          (base32
+           "11i27n0dbz5lmygiw65zzr8lx0rac6b6yysqranphn31wls6ja3v"))
+         (file-name (git-file-name "cl-ansi-text" version))))
+      (build-system asdf-build-system/sbcl)
+      (inputs
+       `(("alexandria" ,sbcl-alexandria)
+         ("fiveam" ,sbcl-fiveam)
+         ("cl-colors" ,sbcl-cl-colors)))
+      (synopsis "Enables ANSI colors for printing")
+      (description
+       "Because color in your terminal is nice.")
+      (home-page "https://github.com/pnathan/cl-ansi-text")
+      ;; REVIEW: The actual license is LLGPL.  Should we add it to Guix?
+      (license license:lgpl3+))))
+
+(define-public cl-ansi-text
+  (sbcl-package->cl-source-package sbcl-cl-ansi-text))
+
+(define-public ecl-cl-ansi-text
+  (sbcl-package->ecl-package sbcl-cl-ansi-text))
+
 (define-public sbcl-ascii-strings
   (let ((revision "1")
         (changeset "5048480a61243e6f1b02884012c8f25cdbee6d97"))
