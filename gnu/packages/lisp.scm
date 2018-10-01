@@ -2421,11 +2421,16 @@ This library is no longer supported by its author.")
       (build-system asdf-build-system/sbcl)
       (inputs
        `(("alexandria" ,sbcl-alexandria)
-         ("fiveam" ,sbcl-fiveam)
          ("cl-colors" ,sbcl-cl-colors)))
-      (synopsis "Enables ANSI colors for printing")
+      (native-inputs
+       `(("fiveam" ,sbcl-fiveam)))
+      (synopsis "ANSI terminal color implementation for Common Lisp")
       (description
-       "Because color in your terminal is nice.")
+       "@command{cl-ansi-text} provides utilities which enable printing to an
+ANSI terminal with colored text.  It provides the macro @command{with-color}
+which causes everything printed in the body to be displayed with the provided
+color.  It further provides functions which will print the argument with the
+named color.")
       (home-page "https://github.com/pnathan/cl-ansi-text")
       ;; REVIEW: The actual license is LLGPL.  Should we add it to Guix?
       (license license:lgpl3+))))
