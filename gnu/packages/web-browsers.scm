@@ -347,19 +347,19 @@ GUI.  It is based on PyQt5 and QtWebKit.")
       ;;    ("sqlite" ,sqlite)))
       (inputs
        `(("alexandria" ,sbcl-alexandria)
-         ("cl-strings" ,sbcl-cl-strings)))
+         ("cl-strings" ,sbcl-cl-strings)
+         ("cl-string-match" ,sbcl-cl-string-match)))
       (arguments
-       `(#:tests? #f
+       `(;; #:tests? #f
          #:asd-file "next/next.asd"
          ;; #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
          ;; #:phases
          ;; (modify-phases %standard-phases
          ;;   (delete 'configure))
-         ))
+                    ))
       (home-page "http://next-browser.com/")
       (synopsis "Emacs-inspired web browser in extensible in Common Lisp")
       (description "Next is a keyboard-oriented, extensible web-browser inspired
 by Emacs and designed for power users.  The application has familiar
-key-bindings, is fully configurable and extensible in Lisp, and has powerful
-features for productive professionals.")
+key-bindings, is fully configurable and extensible in Lisp.")
       (license license:expat))))
