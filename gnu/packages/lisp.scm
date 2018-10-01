@@ -2262,7 +2262,7 @@ testing.  It is an extension of the library written by Chris Riesbeck.")
          "19wfrk3asimznkli0x2rfy637hwpdgqyvwj3vhq9x7vjvyf5vv6x"))
        (file-name (git-file-name "anaphora" version))))
     (build-system asdf-build-system/sbcl)
-    (inputs
+    (native-inputs
      `(("rt" ,sbcl-rt)))
     (synopsis "The anaphoric macro collection from Hell")
     (description
