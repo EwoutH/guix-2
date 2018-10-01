@@ -2488,6 +2488,7 @@ named color.")
      "This project was originally called @command{cl-test-more}.
 @command{prove} is yet another unit testing framework for Common Lisp.  The
 advantages of @command{prove} are:
+
 @itemize
 @item Various simple functions for testing and informative error messages
 @item ASDF integration
