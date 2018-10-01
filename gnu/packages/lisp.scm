@@ -2340,13 +2340,13 @@ supports randomized testing, benchmarking, profiling, and reporting.")
       (inputs
        `(("alexandria" ,sbcl-alexandria)
          ("anaphora" ,sbcl-anaphora)))
-      (arguments
-       ;; Tests require the "LIFT" library.
-       `(#:tests? #f))
+      (native-inputs
+       `(("lift" ,sbcl-lift)))
       (synopsis "Destructuring extension of let*")
       (description
        "This library implements the let+ macro, which is a dectructuring
-extension of let*.  Highlights:
+extension of let*.  It features:
+
 @itemize
 @item Clean, consistent syntax and small implementation (less than 300 LOC, not counting tests)
 @item Placeholder macros allow editor hints and syntax highlighting
