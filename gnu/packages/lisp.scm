@@ -2461,7 +2461,7 @@ named color.")
        `(#:asd-file "prove-asdf.asd"))
       (synopsis "Test requirement for the Common Lisp 'prove' library")
       (description
-       "Test requirement for the Common Lisp 'prove' library.")
+       "Test requirement for the Common Lisp @command{prove} library.")
       (home-page "https://github.com/fukamachi/prove")
       (license license:expat))))
 
