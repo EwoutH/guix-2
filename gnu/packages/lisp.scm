@@ -2278,7 +2278,6 @@ new fiends in addition to old friends like @command{aif} and
 (define-public ecl-anaphora
   (sbcl-package->ecl-package sbcl-anaphora))
 
-;; TODO: sbcl-lift does not build.
 (define-public sbcl-lift
   (let ((commit "7d49a66c62759535624037826891152223d4206c"))
     (package
@@ -2296,8 +2295,16 @@ new fiends in addition to old friends like @command{aif} and
          (file-name (git-file-name "lift" version))))
       (build-system asdf-build-system/sbcl)
       (arguments
-       ;; Ironically, the tests don't pass.
-       `(#:tests? #f))
+       ;; The tests require a debugger, but we run with the debugger disabled.
+       '(#:tests? #f
+         #:phases
+         (modify-phases %standard-phases
+           ;; Do this to ensure the 'reset-gzip-timestamps phase works.
+           (add-after 'unpack 'make-gzips-writeable
+             (lambda _
+               (for-each (lambda (file)
+                           (chmod file #o755))
+                         (find-files "." "\\.gz$")))))))
       (synopsis "LIsp Framework for Testing")
       (description
        "The LIsp Framework for Testing (LIFT) is a unit and system test tool for LISP.
@@ -2306,8 +2313,13 @@ testcases are organized into hierarchical testsuites each of which can have
 its own fixture.  When run, a testcase can succeed, fail, or error.  LIFT
 supports randomized testing, benchmarking, profiling, and reporting.")
       (home-page "https://github.com/gwkkwg/lift")
-      ;; REVIEW: The actual license is "MIT Style".
-      (license license:expat))))
+      (license license:x11-style))))
+
+(define-public cl-lift
+  (sbcl-package->cl-source-package sbcl-lift))
+
+(define-public ecl-lift
+  (sbcl-package->ecl-package sbcl-lift))
 
 (define-public sbcl-let-plus
   (let ((commit "5f14af61d501ecead02ec6b5a5c810efc0c9fdbb"))
