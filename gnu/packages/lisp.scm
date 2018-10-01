@@ -2366,7 +2366,7 @@ extension of let*.  It features:
   (let ((commit "827410584553f5c717eec6182343b7605f707f75"))
     (package
       (name "sbcl-cl-colors")
-      (version (git-version "1.0.0" "1" commit))
+      (version (git-version "0.0.0" "1" commit))
       (source
        (origin
          (method git-fetch)
