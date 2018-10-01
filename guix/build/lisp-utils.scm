@@ -88,6 +88,8 @@ dependency-def form described by
   (match dependency
     ((':version name rest ...)
      `(:version ,(normalize-string name) ,@rest))
+    ((':VERSION name rest ...)
+     `(:version ,(normalize-string name) ,@rest))
     ((':feature feature-specification dependency-specification)
      `(:feature
        ,feature-specification
@@ -295,6 +297,7 @@ system to find its dependencies, as described by GENERATE-DEPENDENCY-LINKS."
   (define dependency-name
     (match-lambda
       ((':version name _ ...) name)
+      ((':VERSION name _ ...) name)
       ((':feature _ dependency-specification)
        (dependency-name dependency-specification))
       ((? string? name) name)
