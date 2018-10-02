@@ -2970,3 +2970,15 @@ The CFFI library is composed of a Lisp-implementation-specific backend
 in the CFFI-SYS package, and a portable frontend in the CFFI
 package.")
     (license license:x11)))
+
+(define-public sbcl-cffi-toolchain
+  (package
+    (inherit sbcl-cffi-bootstrap)
+    (name "sbcl-cffi-toolchain")
+    (inputs
+     `(("libffi" ,libffi)
+       ("sbcl-cffi" ,sbcl-cffi-bootstrap)))
+    (arguments
+     (substitute-keyword-arguments (package-arguments sbcl-cffi-bootstrap)
+       ((#:asd-system-name _) #f)
+       ((#:tests? _) #t)))))
