@@ -2895,3 +2895,13 @@ package.")
      (substitute-keyword-arguments (package-arguments sbcl-cffi-bootstrap)
        ((#:asd-system-name _) #f)
        ((#:tests? _) #t)))))
+
+(define-public sbcl-cffi-libffi
+  (package
+    (inherit sbcl-cffi-toolchain)
+    (name "sbcl-cffi-libffi")
+    (inputs
+     `(("cffi" ,sbcl-cffi-bootstrap)
+       ("cffi-grovel" ,sbcl-cffi-grovel)
+       ("trivial-features" ,sbcl-trivial-features)
+       ("libffi" ,libffi)))))
