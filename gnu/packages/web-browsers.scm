@@ -322,15 +322,15 @@ access.")
 GUI.  It is based on PyQt5 and QtWebKit.")
     (license license:gpl3+)))
 
-(define-public sbcl-next
-  (let ((commit "7e7fe6cac8e2cd6d50232a2f2470cde73fd91b0e"))
+(define-public next-browser
+  (let ((commit "ccc289b44610ada4ae9c875910af7720e85b546b"))
     (package
-      (name "sbcl-next")
+      (name "next-browser")
       (version (git-version "0.0.8" "1" commit))
       (source (origin
                 (method git-fetch)
                 (uri (git-reference
-                      (url "https://github.com/next-browser/next")
+                      (url "https://github.com/atlas-engineer/next")
                       (commit commit)))
                 (sha256
                  (base32
@@ -348,16 +348,19 @@ GUI.  It is based on PyQt5 and QtWebKit.")
       (inputs
        `(("alexandria" ,sbcl-alexandria)
          ("cl-strings" ,sbcl-cl-strings)
-         ("cl-string-match" ,sbcl-cl-string-match)))
+         ("cl-string-match" ,sbcl-cl-string-match)
+         ("puri" ,sbcl-puri)
+         ("queues.simple-queue" ,sbcl-queues.simple-queue)))
       (arguments
-       `(;; #:tests? #f
+       `( ;; #:tests? #f
          #:asd-file "next/next.asd"
+         #:asd-system-name "next"
          ;; #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
          ;; #:phases
          ;; (modify-phases %standard-phases
          ;;   (delete 'configure))
-                    ))
-      (home-page "http://next-browser.com/")
+         ))
+      (home-page "http://next.atlas.engineer/")
       (synopsis "Emacs-inspired web browser in extensible in Common Lisp")
       (description "Next is a keyboard-oriented, extensible web-browser inspired
 by Emacs and designed for power users.  The application has familiar
