@@ -62,6 +62,7 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages xorg)
+  #:use-module (gnu packages databases)
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-19))
@@ -2937,3 +2938,37 @@ package.")
        ("rt" ,sbcl-rt)
        ("bordeaux-threads" ,sbcl-bordeaux-threads)
        ,@(package-native-inputs sbcl-cffi-bootstrap)))))
+
+(define-public sbcl-cl-sqlite
+  (let ((commit "c738e66d4266ef63a1debc4ef4a1b871a068c112"))
+    (package
+      (name "sbcl-cl-sqlite")
+      (version (git-version "0.2" "1" commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/dmitryvk/cl-sqlite")
+               (commit commit)))
+         (sha256
+          (base32
+           "1ng45k1hdb84sqjryrfx93g66bsbybmpy301wd0fdybnc5jzr36q"))))
+      (build-system asdf-build-system/sbcl)
+      (inputs
+       `(("iterate" ,sbcl-iterate)
+         ("cffi" ,sbcl-cffi)
+         ("sqlite" ,sqlite)))
+      ;; TODO: This won't build because we need to add the lib folder of
+      ;; sqlite to cffi:*foreign-library-directories* before compiling with
+      ;; ASDF.
+      (arguments
+       `(#:asd-file "sqlite.asd"
+         #:asd-system-name "sqlite"
+         ;; #:cffi-foreign-library-directories (list (string-append (assoc-ref %build-inputs "sqlite") "/lib"))
+         ))
+      (home-page "https://common-lisp.net/project/cl-sqlite/")
+      (synopsis "Common Lisp binding for SQLite")
+      (description
+       "The @command{cl-sqlite} package is an interface to the SQLite embedded
+relational database engine.")
+      (license license:public-domain))))
