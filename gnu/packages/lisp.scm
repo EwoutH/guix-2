@@ -1791,15 +1791,15 @@ In addition to regular Packrat / Parsing Grammar / TDPL features ESRAP supports:
        (file-name (git-file-name "split-sequence" version))))
     (build-system asdf-build-system/sbcl)
     (arguments
-     ;; Tests seem to be broken.
+     ;; TODO: Tests seem to be broken.
+     ;; https://github.com/sharplispers/split-sequence/issues/8
      `(#:tests? #f))
     (synopsis "split-sequence is a member of the Common Lisp Utilities family of programs")
     (description
      "Splits sequence into a list of subsequences delimited by objects
 satisfying the test.")
     (home-page "https://cliki.net/split-sequence")
-    ;; License seems to be missing: https://github.com/sharplispers/split-sequence/issues/7.
-    (license license:unlicense)))
+    (license license:expat)))
 
 (define-public cl-split-sequence
   (sbcl-package->cl-source-package sbcl-split-sequence))
