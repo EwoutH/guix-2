@@ -2958,14 +2958,24 @@ package.")
        `(("iterate" ,sbcl-iterate)
          ("cffi" ,sbcl-cffi)
          ("sqlite" ,sqlite)))
+      (native-inputs
+       `(("fiveam" ,sbcl-fiveam)
+         ("bordeaux-threads" ,sbcl-bordeaux-threads)))
       ;; TODO: This won't build because we need to add the lib folder of
       ;; sqlite to cffi:*foreign-library-directories* before compiling with
       ;; ASDF.
       (arguments
-       `(#:asd-file "sqlite.asd"
+       `(#:tests? #f                    ; Upstream seems to have issues with tests: https://github.com/dmitryvk/cl-sqlite/issues/7
+         #:asd-file "sqlite.asd"
          #:asd-system-name "sqlite"
-         ;; #:cffi-foreign-library-directories (list (string-append (assoc-ref %build-inputs "sqlite") "/lib"))
-         ))
+         #:phases
+         (modify-phases %standard-phases
+           (add-after 'unpack 'fix-paths
+             (lambda* (#:key inputs #:allow-other-keys)
+               (define freetype (assoc-ref inputs "freetype"))
+               (substitute* "sqlite-ffi.lisp"
+                 (("libsqlite3" all) (string-append
+                                      (assoc-ref inputs "sqlite")"/lib/" all))))))))
       (home-page "https://common-lisp.net/project/cl-sqlite/")
       (synopsis "Common Lisp binding for SQLite")
       (description
