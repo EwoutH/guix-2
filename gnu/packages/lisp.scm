@@ -2950,6 +2950,7 @@ package.")
          (uri (git-reference
                (url "https://github.com/dmitryvk/cl-sqlite")
                (commit commit)))
+         (file-name (git-file-name "cl-sqlite" version))
          (sha256
           (base32
            "1ng45k1hdb84sqjryrfx93g66bsbybmpy301wd0fdybnc5jzr36q"))))
