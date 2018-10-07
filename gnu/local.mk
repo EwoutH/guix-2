@@ -578,6 +578,7 @@ dist_patch_DATA =						\
   %D%/packages/patches/ao-cad-aarch64-support.patch		\
   %D%/packages/patches/apr-skip-getservbyname-test.patch	\
   %D%/packages/patches/aspell-default-dict-dir.patch		\
+  %D%/packages/patches/aspell-gcc-compat.patch			\
   %D%/packages/patches/ath9k-htc-firmware-binutils.patch	\
   %D%/packages/patches/ath9k-htc-firmware-gcc.patch		\
   %D%/packages/patches/ath9k-htc-firmware-objcopy.patch		\
