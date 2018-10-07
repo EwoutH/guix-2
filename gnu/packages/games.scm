@@ -3548,13 +3548,13 @@ throwing people around in pseudo-randomly generated buildings.")
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f ; no check target
-       #:make-flags '("CXXFLAGS=-std=c++11")
        #:phases
        (modify-phases %standard-phases
          (add-after 'set-paths 'set-sdl-paths
            (lambda* (#:key inputs #:allow-other-keys)
              (setenv "CPATH"
-                     (string-append (assoc-ref inputs "sdl-union")
+                     (string-append (getenv "CPATH") ":"
+                                    (assoc-ref inputs "sdl-union")
                                     "/include/SDL"))))
          (replace 'configure
            (lambda* (#:key inputs outputs #:allow-other-keys)
