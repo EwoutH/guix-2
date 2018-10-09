@@ -350,11 +350,23 @@ GUI.  It is based on PyQt5 and QtWebKit.")
          ("cl-strings" ,sbcl-cl-strings)
          ("cl-string-match" ,sbcl-cl-string-match)
          ("puri" ,sbcl-puri)
-         ("queues.simple-queue" ,sbcl-queues.simple-queue)))
+         ("queues.simple-queue" ,sbcl-queues.simple-queue)
+         ("cl-sqlite" ,sbcl-cl-sqlite)
+         ("parenscript" ,sbcl-parenscript)
+         ("cl-json" ,sbcl-cl-json)
+         ("unix-opts" ,sbcl-unix-opts)))
       (arguments
        `( ;; #:tests? #f
          #:asd-file "next/next.asd"
-         #:asd-system-name "next"
+         #:asd-system-name "next/gtk"
+         ;; #:phases
+         ;; (modify-phases %standard-phases
+         ;;   (add-after 'create-symlinks 'build-program
+         ;;     (lambda* (#:key outputs #:allow-other-keys)
+         ;;       (build-program
+         ;;        (string-append (assoc-ref outputs "out") "/bin/next")
+         ;;        outputs
+         ;;        #:entry-program '((next:next) 0)))))
          ;; #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
          ;; #:phases
          ;; (modify-phases %standard-phases
