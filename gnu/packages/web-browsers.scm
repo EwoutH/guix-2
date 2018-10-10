@@ -336,15 +336,8 @@ GUI.  It is based on PyQt5 and QtWebKit.")
                  (base32
                   "1pcpb274zb0qm26rrglgcgzg2d2v7j2aja5685swwyq9rcqlbdf4"))))
       (build-system asdf-build-system/sbcl)
-      ;; :depends-on (:alexandria :cl-strings :cl-string-match :puri
-      ;;              :queues.simple-queue :sqlite :parenscript :cl-json :swank)
-      ;; :depends-on (:next :cl-cffi-gtk :cl-webkit2 :lparallel)
-      ;; inputs or native-inputs?
-      ;; (inputs
-      ;;  `(("glib-networking" ,glib-networking)
-      ;;    ("gsettings-desktop-schemas" ,gsettings-desktop-schemas)
-      ;;    ("webkitgtk" ,webkitgtk)
-      ;;    ("sqlite" ,sqlite)))
+      ;; TODO: Move Common Lisp libraries to "native-inputs"?
+      ;; TODO: Does runtime depends on gsettings-desktop-schemas and glib-networking?
       (inputs
        `(("alexandria" ,sbcl-alexandria)
          ("cl-strings" ,sbcl-cl-strings)
@@ -354,23 +347,22 @@ GUI.  It is based on PyQt5 and QtWebKit.")
          ("cl-sqlite" ,sbcl-cl-sqlite)
          ("parenscript" ,sbcl-parenscript)
          ("cl-json" ,sbcl-cl-json)
-         ("unix-opts" ,sbcl-unix-opts)))
+         ("unix-opts" ,sbcl-unix-opts)
+         ("cl-cffi-gtk" ,sbcl-cl-cffi-gtk)
+         ("cl-webkit" ,sbcl-cl-webkit)
+         ("lparallel" ,sbcl-lparallel)))
       (arguments
        `( ;; #:tests? #f
          #:asd-file "next/next.asd"
          #:asd-system-name "next/gtk"
-         ;; #:phases
-         ;; (modify-phases %standard-phases
-         ;;   (add-after 'create-symlinks 'build-program
-         ;;     (lambda* (#:key outputs #:allow-other-keys)
-         ;;       (build-program
-         ;;        (string-append (assoc-ref outputs "out") "/bin/next")
-         ;;        outputs
-         ;;        #:entry-program '((next:next) 0)))))
-         ;; #:make-flags (list (string-append "DESTDIR=" (assoc-ref %outputs "out")))
-         ;; #:phases
-         ;; (modify-phases %standard-phases
-         ;;   (delete 'configure))
+         #:phases
+         (modify-phases %standard-phases
+           (add-after 'create-symlinks 'build-program
+             (lambda* (#:key outputs #:allow-other-keys)
+               (build-program
+                (string-append (assoc-ref outputs "out") "/bin/next-browser")
+                outputs
+                #:entry-program '((next:start) 0)))))
          ))
       (home-page "http://next.atlas.engineer/")
       (synopsis "Emacs-inspired web browser in extensible in Common Lisp")
