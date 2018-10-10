@@ -2929,7 +2929,7 @@ non-consing thread safe queues and fibonacci priority queues.")
 (define-public ecl-queues.priority-cqueue
   (sbcl-package->ecl-package sbcl-queues.priority-cqueue))
 
-(define-public sbcl-cffi-bootstrap
+(define sbcl-cffi-bootstrap
   (package
     (name "sbcl-cffi-bootstrap")
     (version "0.18.0")
@@ -2971,7 +2971,7 @@ in the CFFI-SYS package, and a portable frontend in the CFFI
 package.")
     (license license:x11)))
 
-(define-public sbcl-cffi-toolchain
+(define sbcl-cffi-toolchain
   (package
     (inherit sbcl-cffi-bootstrap)
     (name "sbcl-cffi-toolchain")
@@ -2983,7 +2983,7 @@ package.")
        ((#:asd-system-name _) #f)
        ((#:tests? _) #t)))))
 
-(define-public sbcl-cffi-libffi
+(define sbcl-cffi-libffi
   (package
     (inherit sbcl-cffi-toolchain)
     (name "sbcl-cffi-libffi")
@@ -2993,7 +2993,7 @@ package.")
        ("trivial-features" ,sbcl-trivial-features)
        ("libffi" ,libffi)))))
 
-(define-public sbcl-cffi-grovel
+(define sbcl-cffi-grovel
   (package
     (inherit sbcl-cffi-toolchain)
     (name "sbcl-cffi-grovel")
