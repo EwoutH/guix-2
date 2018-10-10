@@ -62,6 +62,7 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages databases)
+  #:use-module (gnu packages gtk)
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-19))
@@ -3273,21 +3274,173 @@ Lisp implementations.")
       (inputs
        `(("iterate" ,sbcl-iterate)
          ("cffi" ,sbcl-cffi)
-         ("trivial-features" ,sbcl-trivial-features)
-         ;; ("glib" ,glib)
-         ))
-      ;; (arguments
-      ;;  `(#:asd-file "glib/cl-cffi-gtk-glib.asd"
-      ;;    #:phases
-      ;;    (modify-phases %standard-phases
-      ;;      (add-after 'unpack 'fix-paths
-      ;;        (lambda* (#:key inputs #:allow-other-keys)
-      ;;          (substitute* "glib/glib.init.lisp"
-      ;;            (("libglib|libgthread" all) (string-append
-      ;;                              (assoc-ref inputs "glib") "/lib/" all))))))))
+         ("trivial-features" ,sbcl-trivial-features)))
       (home-page "https://github.com/Ferada/cl-cffi-gtk/")
       (synopsis "Common Lisp binding for GTK+3")
       (description
        "@command{cl-cffi-gtk} is a Lisp binding to GTK+ 3 (GIMP Toolkit) which
 is a library for creating graphical user interfaces.")
       (license license:lgpl3))))
+
+(define-public sbcl-cl-cffi-gtk-glib
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-glib")
+    (inputs
+     `(("glib" ,glib)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "glib/cl-cffi-gtk-glib.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "glib/glib.init.lisp"
+               (("libglib|libgthread" all) (string-append
+                                            (assoc-ref inputs "glib") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk-gobject
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-gobject")
+    (inputs
+     `(("glib" ,glib)
+       ("cl-cffi-gtk-glib" ,sbcl-cl-cffi-gtk-glib)
+       ("trivial-garbage" ,sbcl-trivial-garbage)
+       ("bordeaux-threads" ,sbcl-bordeaux-threads)
+       ("closer-mop" ,sbcl-closer-mop)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "gobject/cl-cffi-gtk-gobject.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "gobject/gobject.init.lisp"
+               (("libgobject" all) (string-append
+                                    (assoc-ref inputs "glib") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk-gio
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-gio")
+    (inputs
+     `(("glib" ,glib)
+       ("cl-cffi-gtk-glib" ,sbcl-cl-cffi-gtk-glib)
+       ("cl-cffi-gtk-gobject" ,sbcl-cl-cffi-gtk-gobject)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "gio/cl-cffi-gtk-gio.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "gio/gio.init.lisp"
+               (("libgio" all)
+                (string-append
+                 (assoc-ref inputs "glib") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk-cairo
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-cairo")
+    (inputs
+     `(("cairo" ,cairo)
+       ("cl-cffi-gtk-glib" ,sbcl-cl-cffi-gtk-glib)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "cairo/cl-cffi-gtk-cairo.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "cairo/cairo.init.lisp"
+               (("libcairo" all)
+                (string-append
+                 (assoc-ref inputs "cairo") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk-pango
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-pango")
+    (inputs
+     `(("pango" ,pango)
+       ("cl-cffi-gtk-glib" ,sbcl-cl-cffi-gtk-glib)
+       ("cl-cffi-gtk-gobject" ,sbcl-cl-cffi-gtk-gobject)
+       ("cl-cffi-gtk-cairo" ,sbcl-cl-cffi-gtk-cairo)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "pango/cl-cffi-gtk-pango.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "pango/pango.init.lisp"
+               (("libpango" all)
+                (string-append
+                 (assoc-ref inputs "pango") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk-gdk-pixbuf
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-gdk-pixbuf")
+    (inputs
+     `(("gdk-pixbuf" ,gdk-pixbuf)
+       ("cl-cffi-gtk-gobject" ,sbcl-cl-cffi-gtk-gobject)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "gdk-pixbuf/cl-cffi-gtk-gdk-pixbuf.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "gdk-pixbuf/gdk-pixbuf.init.lisp"
+               (("libgdk_pixbuf" all)
+                (string-append
+                 (assoc-ref inputs "gdk-pixbuf") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk-gdk
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk-gdk")
+    (inputs
+     `(("gtk" ,gtk+)
+       ("cl-cffi-gtk-gobject" ,sbcl-cl-cffi-gtk-gobject)
+       ("cl-cffi-gtk-gio" ,sbcl-cl-cffi-gtk-gio)
+       ("cl-cffi-gtk-gdk-pixbuf" ,sbcl-cl-cffi-gtk-gdk-pixbuf)
+       ("cl-cffi-gtk-cairo" ,sbcl-cl-cffi-gtk-cairo)
+       ("cl-cffi-gtk-pango" ,sbcl-cl-cffi-gtk-pango)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (arguments
+     `(#:asd-file "gdk/cl-cffi-gtk-gdk.asd"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "gdk/gdk.init.lisp"
+               (("libgdk" all)
+                (string-append
+                 (assoc-ref inputs "gtk") "/lib/" all)))
+             (substitute* "gdk/gdk.package.lisp"
+               (("libgtk" all)
+                (string-append
+                 (assoc-ref inputs "gtk") "/lib/" all))))))))))
+
+(define-public sbcl-cl-cffi-gtk
+  (package
+    (inherit sbcl-cl-cffi-gtk-boot0)
+    (name "sbcl-cl-cffi-gtk")
+    (inputs
+     `(("cl-cffi-gtk-glib" ,sbcl-cl-cffi-gtk-glib)
+       ("cl-cffi-gtk-gobject" ,sbcl-cl-cffi-gtk-gobject)
+       ("cl-cffi-gtk-gio" ,sbcl-cl-cffi-gtk-gio)
+       ("cl-cffi-gtk-gdk" ,sbcl-cl-cffi-gtk-gdk)
+       ,@(package-inputs sbcl-cl-cffi-gtk-boot0)))
+    (native-inputs
+     `(("fiveam" ,sbcl-fiveam)))
+    (arguments
+     `(#:asd-file "gtk/cl-cffi-gtk.asd"
+       #:test-asd-file "test/cl-cffi-gtk-test.asd"
+       ;; TODO: Tests fail with memory fault.
+       ;; See https://github.com/Ferada/cl-cffi-gtk/issues/24.
+       #:tests? #f))))
