@@ -2973,7 +2973,6 @@ package.")
          (modify-phases %standard-phases
            (add-after 'unpack 'fix-paths
              (lambda* (#:key inputs #:allow-other-keys)
-               (define freetype (assoc-ref inputs "freetype"))
                (substitute* "sqlite-ffi.lisp"
                  (("libsqlite3" all) (string-append
                                       (assoc-ref inputs "sqlite")"/lib/" all))))))))
