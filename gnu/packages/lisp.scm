@@ -3197,10 +3197,10 @@ precisely control behavior of the parser via Common Lisp restarts.")
 (define-public ecl-unix-opts
   (sbcl-package->ecl-package sbcl-unix-opts))
 
-(define-public sbcl-cl-cffi-gtk
+(define sbcl-cl-cffi-gtk-boot0
   (let ((commit "29443c5aaca975709df8025c4649366d882033cb"))
     (package
-      (name "sbcl-cl-cffi-gtk")
+      (name "sbcl-cl-cffi-gtk-boot0")
       (version (git-version "0.11.2" "1" commit))
       (source
        (origin
@@ -3216,10 +3216,18 @@ precisely control behavior of the parser via Common Lisp restarts.")
       (inputs
        `(("iterate" ,sbcl-iterate)
          ("cffi" ,sbcl-cffi)
-         ("trivial-features" ,sbcl-trivial-features)))
-      ;; TODO: This won't build because we need to add the various .asd to
-      ;; asdf:*central-registry*
-      ;; https://github.com/Ferada/cl-cffi-gtk/blob/master/INSTALL
+         ("trivial-features" ,sbcl-trivial-features)
+         ;; ("glib" ,glib)
+         ))
+      ;; (arguments
+      ;;  `(#:asd-file "glib/cl-cffi-gtk-glib.asd"
+      ;;    #:phases
+      ;;    (modify-phases %standard-phases
+      ;;      (add-after 'unpack 'fix-paths
+      ;;        (lambda* (#:key inputs #:allow-other-keys)
+      ;;          (substitute* "glib/glib.init.lisp"
+      ;;            (("libglib|libgthread" all) (string-append
+      ;;                              (assoc-ref inputs "glib") "/lib/" all))))))))
       (home-page "https://github.com/Ferada/cl-cffi-gtk/")
       (synopsis "Common Lisp binding for GTK+3")
       (description
