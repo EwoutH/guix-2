@@ -332,12 +332,15 @@ GUI.  It is based on PyQt5 and QtWebKit.")
                 (uri (git-reference
                       (url "https://github.com/atlas-engineer/next")
                       (commit commit)))
+                (patches
+                 (search-patches "next-fix-duplicate-function.patch"))
                 (sha256
                  (base32
                   "1pcpb274zb0qm26rrglgcgzg2d2v7j2aja5685swwyq9rcqlbdf4"))))
       (build-system asdf-build-system/sbcl)
       ;; TODO: Move Common Lisp libraries to "native-inputs"?
       ;; TODO: Does runtime depends on gsettings-desktop-schemas and glib-networking?
+      (outputs '("out" "lib"))
       (inputs
        `(("alexandria" ,sbcl-alexandria)
          ("cl-strings" ,sbcl-cl-strings)

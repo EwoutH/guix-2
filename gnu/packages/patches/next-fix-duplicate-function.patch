@@ -1,0 +1,39 @@
+From 7b6ea6d375e547a6e465504656f819b1f4807d13 Mon Sep 17 00:00:00 2001
+From: Pierre Neidhardt <mail@ambrevar.xyz>
+Date: Thu, 11 Oct 2018 11:14:36 +0200
+Subject: [PATCH] Fix set-url-new-buffer duplicate
+
+---
+ next/source/base.lisp          | 2 +-
+ next/source/document-mode.lisp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/next/source/base.lisp b/next/source/base.lisp
+index 543debe..26eec18 100644
+--- a/next/source/base.lisp
++++ b/next/source/base.lisp
+@@ -53,7 +53,7 @@
+     ;; We can have many urls as positional arguments.
+     (if free-args
+         (loop for url in free-args do
+-             (set-url-new-buffer url t))
++             (%set-url-new-buffer url t))
+         (set-url *start-page-url*))))
+ 
+ (defun initialize-default-key-bindings ()
+diff --git a/next/source/document-mode.lisp b/next/source/document-mode.lisp
+index 4da8546..4e36eec 100644
+--- a/next/source/document-mode.lisp
++++ b/next/source/document-mode.lisp
+@@ -132,7 +132,7 @@ buffer"
+     (history-typed-add input-url))
+   (interface:web-view-set-url (view buffer) input-url))
+ 
+-(defun set-url-new-buffer (input-url &optional disable-history)
++(defun %set-url-new-buffer (input-url &optional disable-history)
+   (let ((new-buffer (generate-new-buffer "default" (document-mode))))
+     (set-visible-active-buffer new-buffer)
+     (set-url-buffer input-url new-buffer disable-history)))
+-- 
+2.19.1
+
