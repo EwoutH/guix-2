@@ -326,7 +326,7 @@ GUI.  It is based on PyQt5 and QtWebKit.")
     (license license:gpl3+)))
 
 (define-public next-browser-core
-  (let ((commit "ccc289b44610ada4ae9c875910af7720e85b546b"))
+  (let ((commit "c69106030df63e5a2fa907e638dfea77dff3b682"))
     (package
       (name "next-browser-core")
       (version (git-version "0.0.8" "1" commit))
@@ -335,8 +335,8 @@ GUI.  It is based on PyQt5 and QtWebKit.")
                 (uri (git-reference
                       (url "https://github.com/atlas-engineer/next")
                       (commit commit)))
-                (patches
-                 (search-patches "next-fix-duplicate-function.patch"))
+                ;; (patches
+                ;;  (search-patches "next-fix-duplicate-function.patch"))
                 (sha256
                  (base32
                   "0rccs9w49p577l12kgykccxrjkr03rf1cfz9mvxbjzc8g82dya2k"))
