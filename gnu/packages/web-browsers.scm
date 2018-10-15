@@ -25,6 +25,7 @@
 (define-module (gnu packages web-browsers)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
+  #:use-module (guix utils)
   #:use-module (gnu packages)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages databases)
@@ -322,10 +323,10 @@ access.")
 GUI.  It is based on PyQt5 and QtWebKit.")
     (license license:gpl3+)))
 
-(define-public next-browser
+(define-public next-browser-core
   (let ((commit "ccc289b44610ada4ae9c875910af7720e85b546b"))
     (package
-      (name "next-browser")
+      (name "next-browser-core")
       (version (git-version "0.0.8" "1" commit))
       (source (origin
                 (method git-fetch)
@@ -336,11 +337,11 @@ GUI.  It is based on PyQt5 and QtWebKit.")
                  (search-patches "next-fix-duplicate-function.patch"))
                 (sha256
                  (base32
-                  "1pcpb274zb0qm26rrglgcgzg2d2v7j2aja5685swwyq9rcqlbdf4"))))
+                  "0rccs9w49p577l12kgykccxrjkr03rf1cfz9mvxbjzc8g82dya2k"))
+                (file-name (git-file-name name version))))
       (build-system asdf-build-system/sbcl)
       ;; TODO: Move Common Lisp libraries to "native-inputs"?
       ;; TODO: Does runtime depends on gsettings-desktop-schemas and glib-networking?
-      (outputs '("out" "lib"))
       (inputs
        `(("alexandria" ,sbcl-alexandria)
          ("cl-strings" ,sbcl-cl-strings)
@@ -350,26 +351,48 @@ GUI.  It is based on PyQt5 and QtWebKit.")
          ("cl-sqlite" ,sbcl-cl-sqlite)
          ("parenscript" ,sbcl-parenscript)
          ("cl-json" ,sbcl-cl-json)
-         ("unix-opts" ,sbcl-unix-opts)
-         ("cl-cffi-gtk" ,sbcl-cl-cffi-gtk)
-         ("cl-webkit" ,sbcl-cl-webkit)
-         ("lparallel" ,sbcl-lparallel)))
+         ("unix-opts" ,sbcl-unix-opts)))
       (arguments
        `( ;; #:tests? #f
          #:asd-file "next/next.asd"
-         #:asd-system-name "next/gtk"
-         #:phases
-         (modify-phases %standard-phases
-           (add-after 'create-symlinks 'build-program
-             (lambda* (#:key outputs #:allow-other-keys)
-               (build-program
-                (string-append (assoc-ref outputs "out") "/bin/next-browser")
-                outputs
-                #:entry-program '((next:start) 0)))))
-         ))
+         #:asd-system-name "next"))
       (home-page "http://next.atlas.engineer/")
       (synopsis "Emacs-inspired web browser in extensible in Common Lisp")
       (description "Next is a keyboard-oriented, extensible web-browser inspired
 by Emacs and designed for power users.  The application has familiar
 key-bindings, is fully configurable and extensible in Lisp.")
       (license license:expat))))
+
+(define-public next-browser
+  (package
+    (inherit next-browser-core)
+    (name "next-browser")
+    (outputs '("out" "lib"))
+    (inputs
+     `(("next" ,next-browser-core)
+       ("cl-cffi-gtk" ,sbcl-cl-cffi-gtk)
+       ("cl-webkit" ,sbcl-cl-webkit)
+       ("lparallel" ,sbcl-lparallel)))
+    (arguments
+     (substitute-keyword-arguments (package-arguments next-browser-core)
+       ((#:asd-system-name _ #f) "next/gtk")
+       ((#:phases phases '%standard-phases)
+        `(modify-phases ,phases
+           (add-before 'cleanup 'move-bundle
+             (lambda* (#:key outputs #:allow-other-keys)
+               (define lib (assoc-ref outputs "lib"))
+               (define actual-fasl (string-append
+                                    lib
+                                    "/lib/sbcl/next/source/next-gtk.fasl"))
+               (define expected-fasl (string-append
+                                      lib
+                                      "/lib/sbcl/gtk--system.fasl"))
+               (copy-file actual-fasl expected-fasl)
+               #t))
+           (add-after 'create-symlinks 'build-program
+             (lambda* (#:key outputs #:allow-other-keys)
+               (build-program
+                (string-append (assoc-ref outputs "out") "/bin/next-browser")
+                outputs
+                #:entry-program '((next:start) 0)
+                #:dependencies '("next-gtk"))))))))))
