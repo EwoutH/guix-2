@@ -339,7 +339,7 @@ GUI.  It is based on PyQt5 and QtWebKit.")
                 ;;  (search-patches "next-fix-duplicate-function.patch"))
                 (sha256
                  (base32
-                  "0rccs9w49p577l12kgykccxrjkr03rf1cfz9mvxbjzc8g82dya2k"))
+                  "09nljavr9ckdi90nqayc8xyq466xk4sf7k81w2a3zm64dlivjmv6"))
                 (file-name (git-file-name name version))))
       (build-system asdf-build-system/sbcl)
       ;; TODO: Move Common Lisp libraries to "native-inputs"?
